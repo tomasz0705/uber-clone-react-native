@@ -13,6 +13,8 @@ import { Icon } from "react-native-elements";
 import { useSelector } from "react-redux";
 import tw from "twrnc";
 import { selectTravelTimeInformation } from "../slices/navSlice";
+import 'intl';
+import 'intl/locale-data/jsonp/pl-PL';
 
 const data = [
   {
@@ -34,6 +36,9 @@ const data = [
     image: "https://links.papareact.com/7pf",
   },
 ];
+
+// If we have SURGE pricing, this goes up
+const SURGE_CHARGE_RATE = 1.5;
 
 const RideOptionsCard = () => {
   const navigation = useNavigation();
@@ -78,12 +83,22 @@ const RideOptionsCard = () => {
               <Text style={tw`text-xl font-semibold`}>{title}</Text>
               <Text>{travelTimeInformation?.duration.text} Travel time</Text>
             </View>
-            <Text style={tw`text-xl`}>99zł</Text>
+            <Text style={tw`text-xl`}>
+              {new Intl.NumberFormat("pl-pl", {
+                style: "currency",
+                currency: "PLN",
+              }).format(
+                (travelTimeInformation?.duration.value *
+                  SURGE_CHARGE_RATE *
+                  multiplier) /
+                  100
+              )}
+            </Text>
           </TouchableOpacity>
         )}
       />
 
-      <View>
+      <View style={tw`mt-auto border-t border-gray-200`}>
         <TouchableOpacity
           disabled={!selected}
           style={tw`bg-black py-3 m-3 ${!selected && "bg-gray-300"}`}
