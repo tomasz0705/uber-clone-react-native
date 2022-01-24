@@ -38,7 +38,9 @@ const RideOptionsCard = () => {
   const [selected, setSelected] = useState(null);
 
   return (
-    <SafeAreaView style={tw`bg-white flex-grow`}>
+    <SafeAreaView
+      style={tw`bg-white flex-1`} //flex-1 fixes the issues where flat list is not scrollable
+    >
       <View>
         <TouchableOpacity
           onPress={() => navigation.navigate("NavigateCard")}
@@ -52,10 +54,12 @@ const RideOptionsCard = () => {
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
-        renderItem={({ item: { id, title, multiplier, image}, item }) => (
+        renderItem={({ item: { id, title, multiplier, image }, item }) => (
           <TouchableOpacity
             onPress={() => setSelected(item)}
-            style={tw`flex-row justify-between items-center px-10 ${id === selected?.id && "bg-gray-200"}`}
+            style={tw`flex-row justify-between items-center px-10 ${
+              id === selected?.id && "bg-gray-200"
+            }`}
           >
             <Image
               style={{
@@ -73,6 +77,17 @@ const RideOptionsCard = () => {
           </TouchableOpacity>
         )}
       />
+
+      <View>
+        <TouchableOpacity
+          disabled={!selected}
+          style={tw`bg-black py-3 m-3 ${!selected && "bg-gray-300"}`}
+        >
+          <Text style={tw`text-center text-white text-xl`}>
+            Choose {selected?.title}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
